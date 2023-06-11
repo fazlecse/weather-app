@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="input-box" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search-btn" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="weather-icon" src="images/clouds.png" alt="">
+            <h1 id="city">Dhaka</h1>
+            <h3><span id="temp">38.06</span>&deg;C</h3>
+            <h1 id="weather" class="lead">Clouds</h1>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "a72c60613e5c387994d49334cbed8c41";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+        const searchBtn = document.getElementById('search-btn');
+        const inputBox = document.getElementById('input-box');
+
+        // async function checkWeather (city){
+        //     const res = await fetch(apiUrl );
+        //     var data = await res.json();
+        //     console.log(data);
+        // }
+        // checkWeather();
+
+        function checkWeather(city) {
+            fetch(apiUrl + city + `&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    // const user = data;
+                    console.log(data);
+                    document.getElementById('city').innerHTML = data.name;
+                    document.getElementById('temp').innerHTML = data.main.temp;
+                    document.getElementById('weather').innerHTML = data.weather[0].main;
+                    if (data.weather[0].main == 'Clouds') {
+                        document.getElementById('weather-icon').src = 'images/clouds.png';
+                    } else if (data.weather[0].main == 'Clear') {
+                        document.getElementById('weather-icon').src = 'images/clear.png';
+                    } else if (data.weather[0].main == 'Rain') {
+                        document.getElementById('weather-icon').src = 'images/rain.png';
+                    }else if (data.weather[0].main == 'Drizzle') {
+                        document.getElementById('weather-icon').src = 'images/drizzle.png';
+                    }else if (data.weather[0].main == 'Mist') {
+                        document.getElementById('weather-icon').src = 'images/mist.png';
+                    }
+                })
+        }
+
+        searchBtn.addEventListener("click", () => {
+            checkWeather(inputBox.value);
+        })
+
+    </script>
+
+</body>
+
+</html>
